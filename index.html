@@ -5,12 +5,10 @@
   <title>Tomorrow Telecom - Partner Compensation Intelligence Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Official Sign-In Identity Services -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800 font-sans antialiased">
 
-  <!-- Navigation Bar -->
+  <!-- Header Navigation -->
   <header class="bg-[#0f5132] text-white shadow-lg sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex justify-between items-center">
       <div class="flex items-center space-x-3">
@@ -25,53 +23,50 @@
         </div>
       </div>
       <div id="userProfile" class="hidden flex items-center space-x-3">
+        <span id="userBadge" class="text-xs px-2.5 py-1 rounded-full font-bold bg-amber-400 text-slate-900 hidden">SUPER ADMIN</span>
         <span id="userEmailSpan" class="text-xs bg-green-950/60 px-3 py-1.5 rounded-full border border-green-700/60 font-mono text-green-200"></span>
         <button onclick="handleLogout()" class="bg-white hover:bg-slate-100 text-[#0f5132] text-xs font-bold px-3.5 py-1.5 rounded-lg shadow transition">
-          Logout
+          Sign Out
         </button>
       </div>
     </div>
   </header>
 
   <!-- Login Section -->
-  <div id="loginSection" class="max-w-md mx-auto mt-24 p-8 bg-white shadow-2xl rounded-3xl text-center border border-slate-200/80">
+  <div id="loginSection" class="max-w-md mx-auto mt-20 p-8 bg-white shadow-2xl rounded-3xl text-center border border-slate-200/80">
     <div class="w-16 h-16 bg-green-50 text-[#0f5132] flex items-center justify-center rounded-2xl mx-auto mb-4 border border-green-100">
       <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
       </svg>
     </div>
     <h2 class="text-2xl font-black text-slate-900 mb-2">Partner Sign In</h2>
-    <p class="text-sm text-slate-500 mb-6 leading-relaxed">Sign in with your registered Google email address to view authenticated store compensation records.</p>
-    
-    <!-- Google Identity Native Button -->
-    <div class="flex justify-center my-4">
-      <div id="g_id_onload"
-           data-client_id="555749923580-kscb5042p1k7q95nsqhuv43k65u2b18h.apps.googleusercontent.com"
-           data-context="signin"
-           data-ux_mode="popup"
-           data-callback="handleCredentialResponse"
-           data-auto_prompt="false">
-      </div>
-      <div class="g_id_signin"
-           data-type="standard"
-           data-shape="rectangular"
-           data-theme="outline"
-           data-text="signin_with"
-           data-size="large"
-           data-logo_alignment="left">
+    <p class="text-sm text-slate-500 mb-6 leading-relaxed">Enter your registered Google partner email address to access your authenticated door compensation reports.</p>
+
+    <!-- Email Entry Form -->
+    <div class="space-y-3">
+      <input type="email" id="partnerEmailInput" placeholder="name@tomorrowtelecom.com" class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#0f5132] transition">
+      <button onclick="submitLogin()" id="loginBtn" class="w-full bg-[#0f5132] hover:bg-green-800 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+        <span>Verify & Enter Dashboard</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </button>
+    </div>
+
+    <!-- Quick Test Profiles Helper -->
+    <div class="mt-6 pt-5 border-t border-slate-100 text-left">
+      <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Quick Test One-Click Access:</p>
+      <div class="flex flex-col gap-1.5">
+        <button onclick="quickFill('seo.azmulani@gmail.com')" class="text-left text-xs bg-slate-50 hover:bg-green-50 hover:text-[#0f5132] p-2 rounded-lg border border-slate-200 transition flex justify-between items-center">
+          <span>👑 seo.azmulani@gmail.com</span>
+          <span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">All Doors</span>
+        </button>
+        <button onclick="quickFill('amiralimulani@gmail.com')" class="text-left text-xs bg-slate-50 hover:bg-green-50 hover:text-[#0f5132] p-2 rounded-lg border border-slate-200 transition flex justify-between items-center">
+          <span>🔍 amiralimulani@gmail.com</span>
+          <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">10 Test Doors</span>
+        </button>
       </div>
     </div>
 
-    <!-- Manual Email Entry Fallback (For instant testing) -->
-    <div class="mt-6 pt-6 border-t border-slate-100">
-      <p class="text-xs text-slate-400 mb-2 font-medium">Or quick-access via verified partner email:</p>
-      <div class="flex gap-2">
-        <input type="email" id="quickEmail" placeholder="Enter partner email..." class="border border-slate-200 rounded-xl px-3 py-2 text-xs flex-1 outline-none focus:ring-2 focus:ring-[#0f5132]">
-        <button onclick="handleQuickLogin()" class="bg-[#0f5132] hover:bg-green-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow">Access</button>
-      </div>
-    </div>
-
-    <p id="loginError" class="text-rose-600 text-xs mt-4 hidden bg-rose-50 p-3 rounded-xl border border-rose-200"></p>
+    <p id="loginError" class="text-rose-600 text-xs mt-4 hidden bg-rose-50 p-3 rounded-xl border border-rose-200 font-medium"></p>
   </div>
 
   <!-- Authenticated Dashboard UI -->
@@ -81,12 +76,12 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
       <div>
         <h2 class="text-2xl font-extrabold text-slate-900" id="ownerTitle">Partner Dashboard</h2>
-        <p class="text-xs text-slate-500 mt-1 font-medium" id="doorsSummary">Loading store assignment...</p>
+        <p class="text-xs text-slate-500 mt-1 font-medium" id="doorsSummary">Fetching assigned stores...</p>
       </div>
       <div class="flex flex-wrap items-center gap-2">
         <button onclick="downloadCSV()" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition shadow">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-          Export CSV
+          Export Filtered CSV
         </button>
       </div>
     </div>
@@ -94,24 +89,24 @@
     <!-- Metric KPI Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Compensation</p>
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Net Compensation</p>
         <p class="text-2xl font-black text-emerald-600 mt-2" id="kpiTotalAmount">$0.00</p>
-        <p class="text-[11px] text-slate-400 mt-1">Net compensation across filter</p>
+        <p class="text-[11px] text-slate-400 mt-1">Sum of selected view</p>
       </div>
       <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
         <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Transactions</p>
         <p class="text-2xl font-black text-slate-800 mt-2" id="kpiTotalCount">0</p>
-        <p class="text-[11px] text-slate-400 mt-1">Processed line items</p>
+        <p class="text-[11px] text-slate-400 mt-1">Processed rows</p>
       </div>
       <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Activations / Retentions</p>
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Activations & Retention</p>
         <p class="text-2xl font-black text-indigo-600 mt-2" id="kpiActivations">0</p>
-        <p class="text-[11px] text-slate-400 mt-1">New subscriber events</p>
+        <p class="text-[11px] text-slate-400 mt-1">New accounts / additions</p>
       </div>
       <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
         <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Door Codes</p>
         <p class="text-2xl font-black text-amber-600 mt-2" id="kpiDoorCount">0</p>
-        <p class="text-[11px] text-slate-400 mt-1">Stores generating transactions</p>
+        <p class="text-[11px] text-slate-400 mt-1">Generating stores</p>
       </div>
     </div>
 
@@ -119,7 +114,7 @@
     <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
         
-        <!-- Navigation Tabs -->
+        <!-- Tabs -->
         <nav class="flex flex-wrap gap-2" id="reportTabs">
           <button onclick="setReportType('all')" class="report-tab-btn active px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-[#0f5132] text-white" data-type="all">All Transactions</button>
           <button onclick="setReportType('activation')" class="report-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200" data-type="activation">Activations / Retention</button>
@@ -128,10 +123,10 @@
           <button onclick="setReportType('hardware')" class="report-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200" data-type="hardware">Hardware / Devices</button>
         </nav>
 
-        <!-- Search and Door Filter -->
+        <!-- Filters -->
         <div class="flex items-center gap-2 w-full sm:w-auto">
           <select id="doorFilterSelect" onchange="applyFilters()" class="border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-medium focus:ring-2 focus:ring-[#0f5132] outline-none">
-            <option value="">All Assigned Doors</option>
+            <option value="">All Doors</option>
           </select>
           <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Search MDN, SOC, Type..." class="border border-slate-300 rounded-xl px-3.5 py-1.5 text-xs w-full sm:w-56 focus:ring-2 focus:ring-[#0f5132] outline-none shadow-sm">
         </div>
@@ -143,6 +138,7 @@
           <thead class="bg-slate-50 text-slate-700 font-semibold uppercase tracking-wider text-[11px]">
             <tr>
               <th class="py-3 px-3 text-left">Door Code</th>
+              <th class="py-3 px-3 text-left">Store Name</th>
               <th class="py-3 px-3 text-left">Trans Date</th>
               <th class="py-3 px-3 text-left">Posted Date</th>
               <th class="py-3 px-3 text-left">Transaction Type</th>
@@ -154,7 +150,7 @@
           </thead>
           <tbody id="tableBody" class="divide-y divide-slate-100 bg-white">
             <tr>
-              <td colspan="8" class="text-center py-14 text-slate-400">Loading records from Master sheet...</td>
+              <td colspan="9" class="text-center py-14 text-slate-400">Loading records...</td>
             </tr>
           </tbody>
         </table>
@@ -163,49 +159,30 @@
       <!-- Footer Info -->
       <div class="flex justify-between items-center text-[11px] text-slate-400 px-2 pt-1">
         <span id="filteredCountLabel">Showing 0 records</span>
-        <span>Secured via Tomorrow Telecom Callidus Cloud Engine</span>
+        <span>Secured via Tomorrow Telecom Callidus Engine</span>
       </div>
     </div>
   </main>
 
   <script>
-    // Connected Google Apps Script Web App Endpoint
+    // Live Apps Script Web App Endpoint
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyupQxtYpQhxmXTaklvOevjxlddmROohJ2COBGW9uBtCENJigixnbun8yVdOjf5ZVoRUA/exec";
 
     let rawMasterData = [];
     let currentFilterType = 'all';
 
-    // Parse Google JWT Token to retrieve email safely
-    function parseJwt(token) {
-      try {
-        var base64Url = token.split('.')[1];
-        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(jsonPayload);
-      } catch (e) {
-        return null;
-      }
+    function quickFill(email) {
+      document.getElementById('partnerEmailInput').value = email;
+      submitLogin();
     }
 
-    // Google Identity Callback
-    function handleCredentialResponse(response) {
-      const payload = parseJwt(response.credential);
-      if (payload && payload.email) {
-        initSession(payload.email);
-      } else {
-        showError("Unable to verify Google account credentials.");
-      }
-    }
-
-    // Quick Manual Login for Partner Email
-    function handleQuickLogin() {
-      const email = document.getElementById('quickEmail').value.trim();
+    function submitLogin() {
+      const email = document.getElementById('partnerEmailInput').value.trim().toLowerCase();
       if (!email || !email.includes('@')) {
-        showError("Please enter a valid partner email address.");
+        showError("Please provide a valid email address.");
         return;
       }
+      hideError();
       initSession(email);
     }
 
@@ -227,26 +204,34 @@
       err.classList.remove('hidden');
     }
 
+    function hideError() {
+      document.getElementById('loginError').classList.add('hidden');
+    }
+
     async function loadPartnerData(email) {
       const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = `<tr><td colspan="8" class="text-center py-14 text-slate-400">Loading authorized records for <b>${email}</b>...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="9" class="text-center py-14 text-slate-400">Loading authorized records for <b>${email}</b>...</td></tr>`;
 
       try {
         const res = await fetch(`${APPS_SCRIPT_URL}?email=${encodeURIComponent(email)}`);
         const json = await res.json();
 
         if (json.status !== "success") {
-          tbody.innerHTML = `<tr><td colspan="8" class="text-center py-14 text-rose-500 font-semibold">${json.message}</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="9" class="text-center py-14 text-rose-500 font-semibold">${json.message}</td></tr>`;
           document.getElementById('doorsSummary').innerText = "Access Denied";
           return;
         }
 
-        document.getElementById('ownerTitle').innerText = `Partner Dashboard: ${json.owner}`;
-        document.getElementById('doorsSummary').innerText = `Assigned Stores: ${json.doors.join(', ')} | Total Rows: ${json.totalRecords}`;
+        if (json.isSuperAdmin) {
+          document.getElementById('userBadge').classList.remove('hidden');
+        }
+
+        document.getElementById('ownerTitle').innerText = json.owner;
+        document.getElementById('doorsSummary').innerText = `Accessible Doors: ${json.doors.join(', ')} | Total Records: ${json.totalRecords}`;
 
         // Populate Door Selector Dropdown
         const doorSelect = document.getElementById('doorFilterSelect');
-        doorSelect.innerHTML = `<option value="">All Assigned Doors (${json.doors.length})</option>`;
+        doorSelect.innerHTML = `<option value="">All Doors (${json.doors.length})</option>`;
         json.doors.forEach(d => {
           doorSelect.innerHTML += `<option value="${d}">Door ${d}</option>`;
         });
@@ -254,7 +239,7 @@
         rawMasterData = json.data || [];
         applyFilters();
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-14 text-rose-500 font-medium">Failed to retrieve data from API. Please verify deployment.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" class="text-center py-14 text-rose-500 font-medium">Failed to retrieve data from API. Please verify deployment.</td></tr>`;
       }
     }
 
@@ -292,7 +277,7 @@
         }
 
         if (query) {
-          const matchStr = `${item.doorCode} ${item.mdn} ${item.transType} ${item.model} ${item.soc} ${item.employee}`.toLowerCase();
+          const matchStr = `${item.doorCode} ${item.doorName} ${item.mdn} ${item.transType} ${item.model} ${item.soc} ${item.employee}`.toLowerCase();
           if (!matchStr.includes(query)) return false;
         }
 
@@ -327,13 +312,14 @@
     function renderTable(items) {
       const tbody = document.getElementById('tableBody');
       if (items.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-14 text-slate-400">No matching transactions found for this view.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" class="text-center py-14 text-slate-400">No matching transactions found for this view.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = items.map(r => `
         <tr class="hover:bg-slate-50/80 transition">
           <td class="py-2.5 px-3 font-semibold text-slate-900">${r.doorCode}</td>
+          <td class="py-2.5 px-3 text-slate-600 truncate max-w-[120px]" title="${r.doorName}">${r.doorName || "-"}</td>
           <td class="py-2.5 px-3 text-slate-600">${r.transDate || "-"}</td>
           <td class="py-2.5 px-3 text-slate-600">${r.postedDate || "-"}</td>
           <td class="py-2.5 px-3 text-slate-700 font-medium">${r.transType || "-"}</td>
@@ -353,9 +339,10 @@
         return;
       }
 
-      const headers = ["Door Code", "Transaction Date", "Posted Date", "Transaction Type", "MDN", "Handset Model", "SOC", "Amount"];
+      const headers = ["Door Code", "Store Name", "Trans Date", "Posted Date", "Transaction Type", "MDN", "Handset Model", "SOC", "Amount"];
       const rows = rawMasterData.map(r => [
         `"${r.doorCode}"`,
+        `"${r.doorName.replace(/"/g, '""')}"`,
         `"${r.transDate}"`,
         `"${r.postedDate}"`,
         `"${r.transType}"`,
