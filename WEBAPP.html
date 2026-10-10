@@ -2,85 +2,151 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tomorrow Telecom - Partner Portal</title>
+  <title>Tomorrow Telecom - Partner Compensation Intelligence Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Firebase SDK Compatibility -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 </head>
-<body class="bg-gray-50 min-h-screen text-gray-800 font-sans">
+<body class="bg-slate-50 min-h-screen text-slate-800 font-sans antialiased">
 
-  <!-- Navigation Header -->
-  <header class="bg-[#137333] text-white py-4 px-6 shadow-md flex justify-between items-center">
-    <div>
-      <h1 class="text-xl font-bold tracking-tight">Tomorrow Telecom & Realty</h1>
-      <p class="text-xs text-green-100 font-medium">Partner Compensation Portal</p>
-    </div>
-    <div id="userProfile" class="hidden flex items-center space-x-3">
-      <span id="userEmailSpan" class="text-sm bg-green-800 px-3 py-1 rounded-full border border-green-600 font-medium"></span>
-      <button onclick="handleLogout()" class="bg-white text-[#137333] hover:bg-gray-100 text-xs font-bold px-3 py-1.5 rounded-lg shadow transition">
-        Logout
-      </button>
+  <!-- Navigation Bar -->
+  <header class="bg-[#0f5132] text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="bg-white/10 p-2 rounded-xl border border-white/20">
+          <svg class="w-6 h-6 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight">Tomorrow Telecom & Realty</h1>
+          <p class="text-xs text-green-200">Executive Partner Portal</p>
+        </div>
+      </div>
+      <div id="userProfile" class="hidden flex items-center space-x-3">
+        <span id="userEmailSpan" class="text-xs bg-green-950/60 px-3 py-1.5 rounded-full border border-green-700/60 font-mono text-green-200"></span>
+        <button onclick="handleLogout()" class="bg-white hover:bg-slate-100 text-[#0f5132] text-xs font-bold px-3.5 py-1.5 rounded-lg shadow transition">
+          Logout
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Login Section -->
-  <div id="loginSection" class="max-w-md mx-auto mt-20 p-8 bg-white shadow-xl rounded-2xl text-center border border-gray-100">
-    <div class="w-14 h-14 bg-green-50 text-[#137333] flex items-center justify-center rounded-2xl mx-auto mb-4">
+  <!-- Login State UI -->
+  <div id="loginSection" class="max-w-md mx-auto mt-24 p-8 bg-white shadow-2xl rounded-3xl text-center border border-slate-200/80">
+    <div class="w-16 h-16 bg-green-50 text-[#0f5132] flex items-center justify-center rounded-2xl mx-auto mb-4 border border-green-100">
       <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
       </svg>
     </div>
-    <h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome Partner</h2>
-    <p class="text-sm text-gray-500 mb-6">Sign in with your authorized Google account to view your assigned store compensation reports.</p>
+    <h2 class="text-2xl font-black text-slate-900 mb-2">Partner Sign In</h2>
+    <p class="text-sm text-slate-500 mb-6 leading-relaxed">Sign in with your registered Google email address to view authenticated store compensation records.</p>
     
-    <button onclick="handleLogin()" class="w-full flex items-center justify-center gap-3 border border-gray-300 py-3 rounded-xl shadow-sm hover:bg-gray-50 font-semibold transition bg-white">
+    <button onclick="handleLogin()" class="w-full flex items-center justify-center gap-3 border border-slate-300 py-3.5 rounded-xl shadow-sm hover:bg-slate-50 font-semibold transition bg-white text-slate-700">
       <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
       Sign in with Google
     </button>
-    
-    <p id="loginError" class="text-red-600 text-xs mt-4 hidden bg-red-50 p-2.5 rounded-lg border border-red-200"></p>
+    <p id="loginError" class="text-rose-600 text-xs mt-4 hidden bg-rose-50 p-3 rounded-xl border border-rose-200"></p>
   </div>
 
-  <!-- Dashboard Section -->
-  <div id="dashboardSection" class="hidden max-w-7xl mx-auto p-6">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+  <!-- Authenticated Dashboard UI -->
+  <main id="dashboardSection" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+    
+    <!-- Top Bar: Title & Doors -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
       <div>
-        <h2 class="text-2xl font-bold text-gray-900" id="ownerTitle">Partner Dashboard</h2>
-        <p class="text-sm text-gray-500 font-medium mt-0.5" id="doorsSummary">Fetching assigned stores...</p>
+        <h2 class="text-2xl font-extrabold text-slate-900" id="ownerTitle">Partner Dashboard</h2>
+        <p class="text-xs text-slate-500 mt-1 font-medium" id="doorsSummary">Loading store assignment...</p>
       </div>
-      <div class="flex items-center gap-3 w-full md:w-auto">
-        <input type="text" id="searchInput" oninput="filterData()" placeholder="Search transactions, MDN, Door..." class="border border-gray-300 rounded-xl px-4 py-2 text-sm w-full md:w-72 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#137333]">
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="downloadCSV()" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition shadow">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Export CSV
+        </button>
       </div>
     </div>
 
-    <!-- Data Table Container -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 text-sm">
-          <thead class="bg-gray-50 text-gray-700 font-semibold">
+    <!-- Live Performance Metric Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Compensation</p>
+        <p class="text-2xl font-black text-emerald-600 mt-2" id="kpiTotalAmount">$0.00</p>
+        <p class="text-[11px] text-slate-400 mt-1">Net compensation across filter</p>
+      </div>
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Transactions</p>
+        <p class="text-2xl font-black text-slate-800 mt-2" id="kpiTotalCount">0</p>
+        <p class="text-[11px] text-slate-400 mt-1">Processed line items</p>
+      </div>
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Activations / Retentions</p>
+        <p class="text-2xl font-black text-indigo-600 mt-2" id="kpiActivations">0</p>
+        <p class="text-[11px] text-slate-400 mt-1">New subscriber events</p>
+      </div>
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Door Codes</p>
+        <p class="text-2xl font-black text-amber-600 mt-2" id="kpiDoorCount">0</p>
+        <p class="text-[11px] text-slate-400 mt-1">Stores generating transactions</p>
+      </div>
+    </div>
+
+    <!-- Report Tabs (Dynamic Filters) -->
+    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+        
+        <!-- Navigation Tabs -->
+        <nav class="flex flex-wrap gap-2" id="reportTabs">
+          <button onclick="setReportType('all')" class="report-tab-btn active px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-[#0f5132] text-white" data-type="all">All Transactions</button>
+          <button onclick="setReportType('activation')" class="report-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200" data-type="activation">Activations / Retention</button>
+          <button onclick="setReportType('feature')" class="report-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200" data-type="feature">Features & Add-ons</button>
+          <button onclick="setReportType('spiff')" class="report-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200" data-type="spiff">HSI & SPIFFs</button>
+          <button onclick="setReportType('hardware')" class="report-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200" data-type="hardware">Hardware / Devices</button>
+        </nav>
+
+        <!-- Search and Door Dropdown -->
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <select id="doorFilterSelect" onchange="applyFilters()" class="border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-medium focus:ring-2 focus:ring-[#0f5132] outline-none">
+            <option value="">All Assigned Doors</option>
+          </select>
+          <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Search MDN, SOC, Type..." class="border border-slate-300 rounded-xl px-3.5 py-1.5 text-xs w-full sm:w-56 focus:ring-2 focus:ring-[#0f5132] outline-none shadow-sm">
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="overflow-x-auto rounded-xl border border-slate-100">
+        <table class="min-w-full divide-y divide-slate-200 text-xs">
+          <thead class="bg-slate-50 text-slate-700 font-semibold uppercase tracking-wider text-[11px]">
             <tr>
-              <th class="py-3.5 px-4 text-left">Door Code</th>
-              <th class="py-3.5 px-4 text-left">Transaction Date</th>
-              <th class="py-3.5 px-4 text-left">Posted Date</th>
-              <th class="py-3.5 px-4 text-left">Transaction Type</th>
-              <th class="py-3.5 px-4 text-left">MDN</th>
-              <th class="py-3.5 px-4 text-right">Amount</th>
+              <th class="py-3 px-3 text-left">Door Code</th>
+              <th class="py-3 px-3 text-left">Trans Date</th>
+              <th class="py-3 px-3 text-left">Posted Date</th>
+              <th class="py-3 px-3 text-left">Transaction Type</th>
+              <th class="py-3 px-3 text-left">MDN</th>
+              <th class="py-3 px-3 text-left">Handset / Model</th>
+              <th class="py-3 px-3 text-left">SOC</th>
+              <th class="py-3 px-3 text-right">Amount</th>
             </tr>
           </thead>
-          <tbody id="tableBody" class="divide-y divide-gray-100">
+          <tbody id="tableBody" class="divide-y divide-slate-100 bg-white">
             <tr>
-              <td colspan="6" class="text-center py-12 text-gray-400">Loading your store data, please wait...</td>
+              <td colspan="8" class="text-center py-14 text-slate-400">Loading records from Master sheet...</td>
             </tr>
           </tbody>
         </table>
       </div>
+
+      <!-- Footer Info -->
+      <div class="flex justify-between items-center text-[11px] text-slate-400 px-2 pt-1">
+        <span id="filteredCountLabel">Showing 0 records</span>
+        <span>Secured via Tomorrow Telecom Callidus Cloud Engine</span>
+      </div>
     </div>
-  </div>
+  </main>
 
   <script>
-    // 1. Fully Configured Firebase Settings
+    // 1. Firebase Project Config (Intact)
     const firebaseConfig = {
       apiKey: "AIzaSyBs0YrQPnjd5oHWJpUir_3wHQJVAhFgIIA",
       authDomain: "metro-portal-83459.firebaseapp.com",
@@ -91,19 +157,20 @@
     };
     firebase.initializeApp(firebaseConfig);
 
-    // 2. Connected Google Apps Script Web App Endpoint
+    // 2. Google Apps Script Web App API (Intact)
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyupQxtYpQhxmXTaklvOevjxlddmROohJ2COBGW9uBtCENJigixnbun8yVdOjf5ZVoRUA/exec";
 
-    let rawData = [];
+    let rawMasterData = [];
+    let currentFilterType = 'all';
 
-    // Authentication State Observer
+    // Firebase Auth Observer
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         document.getElementById('loginSection').classList.add('hidden');
         document.getElementById('dashboardSection').classList.remove('hidden');
         document.getElementById('userProfile').classList.remove('hidden');
         document.getElementById('userEmailSpan').innerText = user.email;
-        fetchOwnerData(user.email);
+        loadPartnerData(user.email);
       } else {
         document.getElementById('loginSection').classList.remove('hidden');
         document.getElementById('dashboardSection').classList.add('hidden');
@@ -124,57 +191,155 @@
       firebase.auth().signOut();
     }
 
-    async function fetchOwnerData(email) {
+    async function loadPartnerData(email) {
       const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-gray-400">Loading records for ${email}...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" class="text-center py-14 text-slate-400">Loading authorized records for <b>${email}</b>...</td></tr>`;
 
       try {
         const res = await fetch(`${APPS_SCRIPT_URL}?email=${encodeURIComponent(email)}`);
         const json = await res.json();
 
         if (json.status !== "success") {
-          tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-red-500 font-medium">${json.message}</td></tr>`;
-          document.getElementById('doorsSummary').innerText = "Access Restricted";
+          tbody.innerHTML = `<tr><td colspan="8" class="text-center py-14 text-rose-500 font-semibold">${json.message}</td></tr>`;
+          document.getElementById('doorsSummary').innerText = "Access Denied";
           return;
         }
 
         document.getElementById('ownerTitle').innerText = `Partner Dashboard: ${json.owner}`;
-        document.getElementById('doorsSummary').innerText = `Assigned Doors: ${json.doors.join(', ')} | Total Records: ${json.totalRecords}`;
+        document.getElementById('doorsSummary').innerText = `Assigned Stores: ${json.doors.join(', ')} | Total Rows: ${json.totalRecords}`;
 
-        rawData = json.data || [];
-        renderTable(rawData);
-      } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-red-500 font-medium">Failed to communicate with data service. Verify Apps Script Web App URL.</td></tr>`;
+        // Populate Door Selector Dropdown
+        const doorSelect = document.getElementById('doorFilterSelect');
+        doorSelect.innerHTML = `<option value="">All Assigned Doors (${json.doors.length})</option>`;
+        json.doors.forEach(d => {
+          doorSelect.innerHTML += `<option value="${d}">Door ${d}</option>`;
+        });
+
+        rawMasterData = json.data || [];
+        applyFilters();
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-14 text-rose-500 font-medium">Failed to retrieve data from API. Please verify deployment.</td></tr>`;
       }
+    }
+
+    function setReportType(type) {
+      currentFilterType = type;
+      document.querySelectorAll('.report-tab-btn').forEach(btn => {
+        if (btn.getAttribute('data-type') === type) {
+          btn.className = "report-tab-btn active px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-[#0f5132] text-white";
+        } else {
+          btn.className = "report-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200";
+        }
+      });
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const selectedDoor = document.getElementById('doorFilterSelect').value;
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+
+      let filtered = rawMasterData.filter(item => {
+        // Door filter
+        if (selectedDoor && item.doorCode !== selectedDoor) return false;
+
+        // Tab type filter
+        if (currentFilterType === 'activation') {
+          const t = (item.transType || "").toLowerCase();
+          if (!t.includes('activation') && !t.includes('retention')) return false;
+        } else if (currentFilterType === 'feature') {
+          const t = (item.transType || "").toLowerCase();
+          if (!t.includes('feature')) return false;
+        } else if (currentFilterType === 'spiff') {
+          const t = (item.transType || "").toLowerCase();
+          const p = (item.program || "").toLowerCase();
+          if (!t.includes('spiff') && !p.includes('spiff') && !t.includes('hsi')) return false;
+        } else if (currentFilterType === 'hardware') {
+          if (!item.model || item.model === "-" || item.model === "NA") return false;
+        }
+
+        // Search Query filter
+        if (query) {
+          const matchStr = `${item.doorCode} ${item.mdn} ${item.transType} ${item.model} ${item.soc} ${item.employee}`.toLowerCase();
+          if (!matchStr.includes(query)) return false;
+        }
+
+        return true;
+      });
+
+      renderKPIs(filtered);
+      renderTable(filtered);
+    }
+
+    function renderKPIs(items) {
+      let totalAmount = 0;
+      let activationsCount = 0;
+      const uniqueDoors = new Set();
+
+      items.forEach(it => {
+        totalAmount += (it.amount || 0);
+        uniqueDoors.add(it.doorCode);
+        const t = (it.transType || "").toLowerCase();
+        if (t.includes('activation') || t.includes('retention')) {
+          activationsCount++;
+        }
+      });
+
+      document.getElementById('kpiTotalAmount').innerText = `$${totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      document.getElementById('kpiTotalCount').innerText = items.length.toLocaleString();
+      document.getElementById('kpiActivations').innerText = activationsCount.toLocaleString();
+      document.getElementById('kpiDoorCount').innerText = uniqueDoors.size.toString();
+      document.getElementById('filteredCountLabel').innerText = `Displaying ${items.length} records`;
     }
 
     function renderTable(items) {
       const tbody = document.getElementById('tableBody');
       if (items.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-gray-400">No transactions recorded for the selected period.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-14 text-slate-400">No matching transactions found for this view.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = items.map(r => `
-        <tr class="hover:bg-gray-50/80 transition">
-          <td class="py-3 px-4 font-semibold text-gray-900">${r["Door Code"]}</td>
-          <td class="py-3 px-4 text-gray-600">${r["Transaction Date"] || "-"}</td>
-          <td class="py-3 px-4 text-gray-600">${r["Posted Date"] || "-"}</td>
-          <td class="py-3 px-4 text-gray-600">${r["Transaction Type"] || "-"}</td>
-          <td class="py-3 px-4 text-gray-600 font-mono text-xs">${r["MDN"] || "-"}</td>
-          <td class="py-3 px-4 text-right font-bold text-green-700">${r["Transaction Amount"] || "$0.00"}</td>
+        <tr class="hover:bg-slate-50/80 transition">
+          <td class="py-2.5 px-3 font-semibold text-slate-900">${r.doorCode}</td>
+          <td class="py-2.5 px-3 text-slate-600">${r.transDate || "-"}</td>
+          <td class="py-2.5 px-3 text-slate-600">${r.postedDate || "-"}</td>
+          <td class="py-2.5 px-3 text-slate-700 font-medium">${r.transType || "-"}</td>
+          <td class="py-2.5 px-3 font-mono text-slate-600">${r.mdn || "-"}</td>
+          <td class="py-2.5 px-3 text-slate-600 truncate max-w-xs" title="${r.model}">${r.model || "-"}</td>
+          <td class="py-2.5 px-3 font-mono text-slate-500">${r.soc || "-"}</td>
+          <td class="py-2.5 px-3 text-right font-bold ${r.amount >= 0 ? 'text-emerald-700' : 'text-rose-600'}">
+            $${Number(r.amount).toFixed(2)}
+          </td>
         </tr>
       `).join('');
     }
 
-    function filterData() {
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = rawData.filter(d => 
-        String(d["Door Code"] || "").toLowerCase().includes(q) ||
-        String(d["MDN"] || "").toLowerCase().includes(q) ||
-        String(d["Transaction Type"] || "").toLowerCase().includes(q)
-      );
-      renderTable(filtered);
+    function downloadCSV() {
+      if (rawMasterData.length === 0) {
+        alert("No data available to export.");
+        return;
+      }
+
+      const headers = ["Door Code", "Transaction Date", "Posted Date", "Transaction Type", "MDN", "Handset Model", "SOC", "Amount"];
+      const rows = rawMasterData.map(r => [
+        `"${r.doorCode}"`,
+        `"${r.transDate}"`,
+        `"${r.postedDate}"`,
+        `"${r.transType}"`,
+        `"${r.mdn}"`,
+        `"${r.model.replace(/"/g, '""')}"`,
+        `"${r.soc}"`,
+        r.amount
+      ]);
+
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `Compensation_Report_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   </script>
 </body>
