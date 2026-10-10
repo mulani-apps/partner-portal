@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tomorrow Telecom - Advanced Partner Intelligence</title>
+  <title>Tomorrow Telecom - Advanced Partner Intelligence Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Custom Scrollbar for the advanced table */
     ::-webkit-scrollbar { height: 8px; width: 8px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -18,7 +17,7 @@
 
   <!-- Header -->
   <header class="bg-[#0f5132] text-white shadow-md sticky top-0 z-50">
-    <div class="max-w-[96%] mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="max-w-[96%] mx-auto px-4 py-3.5 flex justify-between items-center">
       <div class="flex items-center space-x-3">
         <div class="bg-white/10 p-2 rounded-lg border border-white/20">
           <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,12 +25,12 @@
           </svg>
         </div>
         <div>
-          <h1 class="text-md font-bold tracking-tight">Tomorrow Telecom</h1>
-          <p class="text-[10px] text-green-200 uppercase tracking-wider">Advanced Partner Portal</p>
+          <h1 class="text-md font-bold tracking-tight">Tomorrow Telecom & Realty</h1>
+          <p class="text-[10px] text-green-200 uppercase tracking-wider">Advanced Partner Intelligence Portal</p>
         </div>
       </div>
       <div id="userProfile" class="hidden flex items-center space-x-3">
-        <span id="userBadge" class="text-[10px] px-2 py-1 rounded-sm font-bold bg-amber-400 text-slate-900 hidden">SUPER ADMIN</span>
+        <span id="userBadge" class="text-[10px] px-2 py-1 rounded font-bold bg-amber-400 text-slate-900 hidden">SUPER ADMIN</span>
         <span id="userEmailSpan" class="text-xs bg-green-950/60 px-3 py-1.5 rounded-full border border-green-700/60 font-mono text-green-200"></span>
         <button onclick="handleLogout()" class="bg-white hover:bg-slate-100 text-[#0f5132] text-xs font-bold px-3 py-1.5 rounded-md shadow transition">Sign Out</button>
       </div>
@@ -40,11 +39,16 @@
 
   <!-- Login Section -->
   <div id="loginSection" class="max-w-md mx-auto mt-24 p-8 bg-white shadow-xl rounded-2xl border border-slate-200 text-center">
-    <h2 class="text-2xl font-black text-slate-900 mb-2">Secure Access</h2>
-    <p class="text-xs text-slate-500 mb-6">Enter your authorized email to access compensation records.</p>
+    <div class="w-14 h-14 bg-green-50 text-[#0f5132] flex items-center justify-center rounded-2xl mx-auto mb-4 border border-green-100">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+      </svg>
+    </div>
+    <h2 class="text-2xl font-black text-slate-900 mb-2">Partner Sign In</h2>
+    <p class="text-xs text-slate-500 mb-6 leading-relaxed">Enter your registered partner email address to access authorized compensation records.</p>
     <div class="space-y-4">
       <input type="email" id="partnerEmailInput" placeholder="name@domain.com" class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#0f5132] focus:ring-1 focus:ring-[#0f5132]">
-      <button onclick="submitLogin()" class="w-full bg-[#0f5132] hover:bg-green-800 text-white font-bold py-3 px-4 rounded-lg shadow transition">Verify Account</button>
+      <button onclick="submitLogin()" class="w-full bg-[#0f5132] hover:bg-green-800 text-white font-bold py-3 px-4 rounded-lg shadow transition">Verify & Enter Dashboard</button>
     </div>
     <p id="loginError" class="text-rose-600 text-xs mt-4 hidden bg-rose-50 p-2 rounded border border-rose-200"></p>
   </div>
@@ -60,11 +64,11 @@
       </div>
       
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-        <p class="text-[10px] font-bold text-slate-400 uppercase">Filtered Compensation</p>
+        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Filtered Net Compensation</p>
         <p class="text-2xl font-black text-emerald-600 mt-1" id="kpiTotalAmount">$0.00</p>
       </div>
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-        <p class="text-[10px] font-bold text-slate-400 uppercase">Total Rows (Filtered)</p>
+        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Transactions</p>
         <p class="text-2xl font-black text-slate-800 mt-1" id="kpiTotalCount">0</p>
       </div>
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center gap-2">
@@ -83,8 +87,8 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
         <!-- Universal Search -->
         <div class="md:col-span-2">
-          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Universal Search (IMEI, Address, MDN, etc.)</label>
-          <input type="text" id="filterSearch" oninput="applyFilters()" placeholder="Search anything in the report..." class="w-full border border-slate-300 rounded px-3 py-1.5 text-xs outline-none focus:border-[#0f5132]">
+          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Universal Search (IMEI, Address, MDN, Model, etc.)</label>
+          <input type="text" id="filterSearch" oninput="applyFilters()" placeholder="Type to search entire row..." class="w-full border border-slate-300 rounded px-3 py-1.5 text-xs outline-none focus:border-[#0f5132]">
         </div>
         
         <!-- Door Code -->
@@ -105,7 +109,7 @@
           </select>
         </div>
         
-        <!-- Pre-set Tabs -->
+        <!-- Quick Preset Tabs -->
         <div>
           <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Quick View</label>
           <select id="filterType" onchange="applyFilters()" class="w-full border border-slate-300 rounded px-3 py-1.5 text-xs outline-none focus:border-[#0f5132]">
@@ -133,96 +137,107 @@
       </div>
     </div>
 
-    <!-- Data Table Container -->
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[500px]">
+    <!-- Wide Scrollable Table -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[520px]">
       <div class="overflow-auto flex-1 relative">
-        <table class="w-full text-left border-collapse min-w-[2000px]"> <!-- Very wide to support all headers -->
-          <thead id="tableHead" class="table-header text-[10px] uppercase text-slate-500 font-bold bg-slate-50 border-b border-slate-200">
-            <!-- Headers injected via JS -->
+        <table class="w-full text-left border-collapse min-w-[2400px]">
+          <thead id="tableHead" class="table-header text-[10px] uppercase text-slate-600 font-bold bg-slate-50 border-b border-slate-200">
           </thead>
           <tbody id="tableBody" class="divide-y divide-slate-100 text-xs text-slate-700">
             <tr><td class="p-8 text-center text-slate-400">Please sign in to load records...</td></tr>
           </tbody>
         </table>
       </div>
-      <div class="bg-slate-50 border-t border-slate-200 p-2 text-[10px] text-slate-500 flex justify-between">
+      <div class="bg-slate-50 border-t border-slate-200 p-2.5 text-[10px] text-slate-500 flex justify-between">
         <span id="tableStatus">Showing 0 rows</span>
-        <span>Secure Environment</span>
+        <span>Secured via Tomorrow Telecom Analytics</span>
       </div>
     </div>
   </main>
 
   <script>
-    // REPLACE WITH YOUR APPS SCRIPT WEB APP URL
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyupQxtYpQhxmXTaklvOevjxlddmROohJ2COBGW9uBtCENJigixnbun8yVdOjf5ZVoRUA/exec";
+    // UPDATED ACTIVE DEPLOYMENT URL
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCqMI7zCicgeOmeg_JzspAMo1m0NcZkxT6wP6U1vF2shyGM3zDZaY8ffn3TIM8t-eIMA/exec";
 
     let globalHeaders = [];
     let globalDataRows = [];
     let filteredRows = [];
+    const colIdx = {};
 
-    // Header Index Map for dynamic column finding
-    const colIdx = {}; 
-
-    document.getElementById("partnerEmailInput").addEventListener("keypress", (e) => { if(e.key === "Enter") submitLogin(); });
+    document.getElementById("partnerEmailInput").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") submitLogin();
+    });
 
     function submitLogin() {
       const email = document.getElementById('partnerEmailInput').value.trim().toLowerCase();
-      if (!email || !email.includes('@')) return showError("Invalid email format.");
+      if (!email || !email.includes('@')) return showError("Please provide a valid email address.");
       document.getElementById('loginError').classList.add('hidden');
       document.getElementById('loginSection').classList.add('hidden');
       document.getElementById('dashboardSection').classList.remove('hidden');
       document.getElementById('userProfile').classList.remove('hidden');
       document.getElementById('userEmailSpan').innerText = email;
-      fetchData(email);
+      fetchDataJSONP(email);
     }
 
     function handleLogout() { location.reload(); }
     function showError(msg) { const e = document.getElementById('loginError'); e.innerText = msg; e.classList.remove('hidden'); }
 
-    async function fetchData(email) {
-      document.getElementById('tableBody').innerHTML = `<tr><td class="p-10 text-center text-[#0f5132] font-bold text-sm"><div class="inline-block animate-spin rounded-full h-5 w-5 border-b-2 border-[#0f5132] mr-2 mb-1"></div>Loading secure records... This may take a moment.</td></tr>`;
-      try {
-        const response = await fetch(`${APPS_SCRIPT_URL}?email=${encodeURIComponent(email)}`);
-        if(!response.ok) throw new Error("Network Error");
-        const json = await response.json();
+    // JSONP Implementation: Bypasses Google Drive redirects and CORS blocks
+    function fetchDataJSONP(email) {
+      document.getElementById('tableBody').innerHTML = `<tr><td class="p-12 text-center text-[#0f5132] font-semibold text-sm">
+        <div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-[#0f5132] mr-2 mb-1"></div>
+        Securely loading authorized data...
+      </td></tr>`;
 
-        if (json.status !== "success") {
-          document.getElementById('tableBody').innerHTML = `<tr><td class="p-10 text-center text-rose-600 font-bold">${json.message}</td></tr>`;
-          return;
-        }
+      const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+      
+      window[callbackName] = function(json) {
+        delete window[callbackName];
+        const scriptElement = document.getElementById(callbackName);
+        if (scriptElement) scriptElement.parentNode.removeChild(scriptElement);
 
-        if (json.isSuperAdmin) document.getElementById('userBadge').classList.remove('hidden');
-        document.getElementById('ownerTitle').innerText = json.owner;
-        document.getElementById('doorsSummary').innerText = `Authorized Doors: ${json.doors.join(', ')}`;
+        handleApiResponse(json);
+      };
 
-        globalHeaders = json.headers;
-        globalDataRows = json.data;
-
-        // Map column names to indices automatically (case-insensitive)
-        globalHeaders.forEach((h, i) => { colIdx[String(h).toLowerCase().trim()] = i; });
-        
-        // Find important columns (fallback to partial match if exact match fails)
-        colIdx.doorCode = findColumnIndex(["door code", "dealer code", "store"]);
-        colIdx.transDate = findColumnIndex(["transaction date", "trans date"]);
-        colIdx.postDate = findColumnIndex(["posted date", "post date"]);
-        colIdx.amount = findColumnIndex(["amount", "numeric amount", "transaction amount"]);
-        colIdx.transType = findColumnIndex(["transaction type", "trans type"]);
-        colIdx.status = findColumnIndex(["qualification status", "status", "qualification"]);
-
-        // Populate Door Filter Dropdown dynamically based on actual data
-        const doorSelect = document.getElementById('filterDoor');
-        const uniqueDoors = new Set(globalDataRows.map(row => row[colIdx.doorCode]));
-        uniqueDoors.forEach(d => { if(d) doorSelect.innerHTML += `<option value="${d}">${d}</option>`; });
-
-        buildTableHeader();
-        applyFilters();
-
-      } catch(err) {
-        document.getElementById('tableBody').innerHTML = `<tr><td class="p-10 text-center text-rose-600 font-bold">Failed to connect to Secure API. Check deployment 'Anyone' access.</td></tr>`;
-      }
+      const script = document.createElement('script');
+      script.id = callbackName;
+      script.src = `${APPS_SCRIPT_URL}?email=${encodeURIComponent(email)}&callback=${callbackName}`;
+      script.onerror = function() {
+        document.getElementById('tableBody').innerHTML = `<tr><td class="p-10 text-center text-rose-600 font-bold">Failed to load API data. Please verify deployment access is set to 'Anyone'.</td></tr>`;
+      };
+      document.body.appendChild(script);
     }
 
-    // Helper to find column index gracefully
+    function handleApiResponse(json) {
+      if (json.status !== "success") {
+        document.getElementById('tableBody').innerHTML = `<tr><td class="p-10 text-center text-rose-600 font-bold">${json.message}</td></tr>`;
+        return;
+      }
+
+      if (json.isSuperAdmin) document.getElementById('userBadge').classList.remove('hidden');
+      document.getElementById('ownerTitle').innerText = json.owner;
+      document.getElementById('doorsSummary').innerText = `Authorized Doors: ${json.doors.join(', ')}`;
+
+      globalHeaders = json.headers || [];
+      globalDataRows = json.data || [];
+
+      globalHeaders.forEach((h, i) => { colIdx[String(h).toLowerCase().trim()] = i; });
+      colIdx.doorCode = findColumnIndex(["door code", "dealer code", "store"]);
+      colIdx.transDate = findColumnIndex(["transaction date", "trans date"]);
+      colIdx.postDate = findColumnIndex(["posted date", "post date"]);
+      colIdx.amount = findColumnIndex(["numeric amount", "amount", "transaction amount"]);
+      colIdx.transType = findColumnIndex(["transaction type", "trans type"]);
+      colIdx.status = findColumnIndex(["qualification status", "status", "qualification"]);
+
+      const doorSelect = document.getElementById('filterDoor');
+      doorSelect.innerHTML = '<option value="">All My Doors</option>';
+      const uniqueDoors = new Set(globalDataRows.map(row => row[colIdx.doorCode]));
+      uniqueDoors.forEach(d => { if (d) doorSelect.innerHTML += `<option value="${d}">${d}</option>`; });
+
+      buildTableHeader();
+      applyFilters();
+    }
+
     function findColumnIndex(possibleNames) {
       for (let name of possibleNames) {
         let exactMatch = globalHeaders.findIndex(h => String(h).toLowerCase().trim() === name);
@@ -234,13 +249,11 @@
     }
 
     function buildTableHeader() {
-      // Prioritize some key columns first if they exist, then dump the rest, 
-      // OR simply render all headers in order so user sees the EXACT sheet structure.
       const thead = document.getElementById('tableHead');
       const tr = document.createElement('tr');
       globalHeaders.forEach(h => {
         const th = document.createElement('th');
-        th.className = "py-2 px-3 whitespace-nowrap tracking-wide border-r border-slate-200";
+        th.className = "py-2.5 px-3 whitespace-nowrap tracking-wide border-r border-slate-200";
         th.innerText = h;
         tr.appendChild(th);
       });
@@ -272,38 +285,32 @@
       const pEnd = document.getElementById('postDateEnd').value;
 
       filteredRows = globalDataRows.filter(row => {
-        // 1. Door Filter
         if (doorQ && row[colIdx.doorCode] !== doorQ) return false;
         
-        // 2. Type Filter (Activation / SPIFF)
         if (typeQ !== 'all' && colIdx.transType !== -1) {
           const typeVal = String(row[colIdx.transType]).toLowerCase();
           if (typeQ === 'activation' && !typeVal.includes('activation') && !typeVal.includes('retention')) return false;
           if (typeQ === 'spiff' && !typeVal.includes('spiff') && !typeVal.includes('hsi')) return false;
         }
 
-        // 3. Status Filter
         if (statusQ && colIdx.status !== -1) {
           const sVal = String(row[colIdx.status]).toLowerCase();
           if (statusQ === 'qualified' && (!sVal.includes('qual') || sVal.includes('non'))) return false;
           if (statusQ === 'non-qualified' && !sVal.includes('non') && !sVal.includes('pending')) return false;
         }
 
-        // 4. Transaction Date Filter
         if ((tStart || tEnd) && colIdx.transDate !== -1) {
-          const rDate = row[colIdx.transDate]; // Already yyyy-mm-dd
+          const rDate = row[colIdx.transDate];
           if (tStart && rDate < tStart) return false;
           if (tEnd && rDate > tEnd) return false;
         }
 
-        // 5. Posted Date Filter
         if ((pStart || pEnd) && colIdx.postDate !== -1) {
           const pDate = row[colIdx.postDate]; 
           if (pStart && pDate < pStart) return false;
           if (pEnd && pDate > pEnd) return false;
         }
 
-        // 6. Universal Search (Checks ALL columns: Address, IMEI, MDN, etc.)
         if (searchQ) {
           const fullRowString = row.join(" ").toLowerCase();
           if (!fullRowString.includes(searchQ)) return false;
@@ -319,21 +326,19 @@
     function renderTable() {
       const tbody = document.getElementById('tableBody');
       if (filteredRows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${globalHeaders.length}" class="p-8 text-center text-slate-400">No records found matching these filters.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${globalHeaders.length || 10}" class="p-8 text-center text-slate-400">No records match the selected filter criteria.</td></tr>`;
         return;
       }
 
-      // To prevent browser freeze on huge lists, render up to 500 rows in UI max. (CSV exports all)
-      const displayLimit = 500; 
+      const displayLimit = 500;
       const rowsToRender = filteredRows.slice(0, displayLimit);
 
       const html = rowsToRender.map(row => {
         const cells = row.map((cell, index) => {
-          // Highlight amount column specifically if found
           let className = "py-2 px-3 whitespace-nowrap border-r border-slate-100";
           if (index === colIdx.amount) {
             const num = Number(String(cell).replace(/[^0-9.-]+/g, ""));
-            className += num >= 0 ? " font-bold text-emerald-600" : " font-bold text-rose-600";
+            className += num >= 0 ? " font-bold text-emerald-700" : " font-bold text-rose-600";
           }
           return `<td class="${className}">${cell}</td>`;
         }).join('');
@@ -341,9 +346,8 @@
       }).join('');
 
       tbody.innerHTML = html;
-      
-      let statusMsg = `Showing ${rowsToRender.length} of ${filteredRows.length} filtered rows.`;
-      if(filteredRows.length > displayLimit) statusMsg += ` (Use CSV export to download all).`;
+      let statusMsg = `Displaying ${rowsToRender.length} of ${filteredRows.length} filtered rows.`;
+      if (filteredRows.length > displayLimit) statusMsg += ` (Download CSV for complete raw records).`;
       document.getElementById('tableStatus').innerText = statusMsg;
     }
 
@@ -357,13 +361,11 @@
         }
       });
       document.getElementById('kpiTotalCount').innerText = filteredRows.length.toLocaleString();
-      document.getElementById('kpiTotalAmount').innerText = `$${totalAmount.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+      document.getElementById('kpiTotalAmount').innerText = `$${totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 
-    // Export Logic
     function downloadCSV(type) {
       const dataToExport = type === 'filtered' ? filteredRows : globalDataRows;
-      
       if (dataToExport.length === 0) {
         alert("No data available to export.");
         return;
@@ -381,7 +383,6 @@
       
       const label = type === 'filtered' ? 'Filtered_Report' : 'Complete_Authorized_Report';
       link.setAttribute("download", `${label}_${new Date().toISOString().slice(0,10)}.csv`);
-      
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
