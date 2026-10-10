@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tomorrow Telecom - Partner Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Firebase SDK Compatibility -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen text-gray-800 font-sans">
+
+  <!-- Navigation Header -->
+  <header class="bg-[#137333] text-white py-4 px-6 shadow-md flex justify-between items-center">
+    <div>
+      <h1 class="text-xl font-bold tracking-tight">Tomorrow Telecom & Realty</h1>
+      <p class="text-xs text-green-100 font-medium">Partner Compensation Portal</p>
+    </div>
+    <div id="userProfile" class="hidden flex items-center space-x-3">
+      <span id="userEmailSpan" class="text-sm bg-green-800 px-3 py-1 rounded-full border border-green-600 font-medium"></span>
+      <button onclick="handleLogout()" class="bg-white text-[#137333] hover:bg-gray-100 text-xs font-bold px-3 py-1.5 rounded-lg shadow transition">
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Login Section -->
+  <div id="loginSection" class="max-w-md mx-auto mt-20 p-8 bg-white shadow-xl rounded-2xl text-center border border-gray-100">
+    <div class="w-14 h-14 bg-green-50 text-[#137333] flex items-center justify-center rounded-2xl mx-auto mb-4">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+      </svg>
+    </div>
+    <h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome Partner</h2>
+    <p class="text-sm text-gray-500 mb-6">Sign in with your authorized Google account to view your assigned store compensation reports.</p>
+    
+    <button onclick="handleLogin()" class="w-full flex items-center justify-center gap-3 border border-gray-300 py-3 rounded-xl shadow-sm hover:bg-gray-50 font-semibold transition bg-white">
+      <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
+      Sign in with Google
+    </button>
+    
+    <p id="loginError" class="text-red-600 text-xs mt-4 hidden bg-red-50 p-2.5 rounded-lg border border-red-200"></p>
+  </div>
+
+  <!-- Dashboard Section -->
+  <div id="dashboardSection" class="hidden max-w-7xl mx-auto p-6">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900" id="ownerTitle">Partner Dashboard</h2>
+        <p class="text-sm text-gray-500 font-medium mt-0.5" id="doorsSummary">Fetching assigned stores...</p>
+      </div>
+      <div class="flex items-center gap-3 w-full md:w-auto">
+        <input type="text" id="searchInput" oninput="filterData()" placeholder="Search transactions, MDN, Door..." class="border border-gray-300 rounded-xl px-4 py-2 text-sm w-full md:w-72 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#137333]">
+      </div>
+    </div>
+
+    <!-- Data Table Container -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 text-sm">
+          <thead class="bg-gray-50 text-gray-700 font-semibold">
+            <tr>
+              <th class="py-3.5 px-4 text-left">Door Code</th>
+              <th class="py-3.5 px-4 text-left">Transaction Date</th>
+              <th class="py-3.5 px-4 text-left">Posted Date</th>
+              <th class="py-3.5 px-4 text-left">Transaction Type</th>
+              <th class="py-3.5 px-4 text-left">MDN</th>
+              <th class="py-3.5 px-4 text-right">Amount</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody" class="divide-y divide-gray-100">
+            <tr>
+              <td colspan="6" class="text-center py-12 text-gray-400">Loading your store data, please wait...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. Fully Configured Firebase Settings
+    const firebaseConfig = {
+      apiKey: "AIzaSyBs0YrQPnjd5oHWJpUir_3wHQJVAhFgIIA",
+      authDomain: "metro-portal-83459.firebaseapp.com",
+      projectId: "metro-portal-83459",
+      storageBucket: "metro-portal-83459.firebasestorage.app",
+      messagingSenderId: "555749923580",
+      appId: "1:555749923580:web:4a705a97ade359dd86d579"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    // 2. Connected Google Apps Script Web App Endpoint
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyupQxtYpQhxmXTaklvOevjxlddmROohJ2COBGW9uBtCENJigixnbun8yVdOjf5ZVoRUA/exec";
+
+    let rawData = [];
+
+    // Authentication State Observer
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('dashboardSection').classList.remove('hidden');
+        document.getElementById('userProfile').classList.remove('hidden');
+        document.getElementById('userEmailSpan').innerText = user.email;
+        fetchOwnerData(user.email);
+      } else {
+        document.getElementById('loginSection').classList.remove('hidden');
+        document.getElementById('dashboardSection').classList.add('hidden');
+        document.getElementById('userProfile').classList.add('hidden');
+      }
+    });
+
+    function handleLogin() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider).catch(err => {
+        const errorEl = document.getElementById('loginError');
+        errorEl.innerText = err.message;
+        errorEl.classList.remove('hidden');
+      });
+    }
+
+    function handleLogout() {
+      firebase.auth().signOut();
+    }
+
+    async function fetchOwnerData(email) {
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-gray-400">Loading records for ${email}...</td></tr>`;
+
+      try {
+        const res = await fetch(`${APPS_SCRIPT_URL}?email=${encodeURIComponent(email)}`);
+        const json = await res.json();
+
+        if (json.status !== "success") {
+          tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-red-500 font-medium">${json.message}</td></tr>`;
+          document.getElementById('doorsSummary').innerText = "Access Restricted";
+          return;
+        }
+
+        document.getElementById('ownerTitle').innerText = `Partner Dashboard: ${json.owner}`;
+        document.getElementById('doorsSummary').innerText = `Assigned Doors: ${json.doors.join(', ')} | Total Records: ${json.totalRecords}`;
+
+        rawData = json.data || [];
+        renderTable(rawData);
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-red-500 font-medium">Failed to communicate with data service. Verify Apps Script Web App URL.</td></tr>`;
+      }
+    }
+
+    function renderTable(items) {
+      const tbody = document.getElementById('tableBody');
+      if (items.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-gray-400">No transactions recorded for the selected period.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = items.map(r => `
+        <tr class="hover:bg-gray-50/80 transition">
+          <td class="py-3 px-4 font-semibold text-gray-900">${r["Door Code"]}</td>
+          <td class="py-3 px-4 text-gray-600">${r["Transaction Date"] || "-"}</td>
+          <td class="py-3 px-4 text-gray-600">${r["Posted Date"] || "-"}</td>
+          <td class="py-3 px-4 text-gray-600">${r["Transaction Type"] || "-"}</td>
+          <td class="py-3 px-4 text-gray-600 font-mono text-xs">${r["MDN"] || "-"}</td>
+          <td class="py-3 px-4 text-right font-bold text-green-700">${r["Transaction Amount"] || "$0.00"}</td>
+        </tr>
+      `).join('');
+    }
+
+    function filterData() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = rawData.filter(d => 
+        String(d["Door Code"] || "").toLowerCase().includes(q) ||
+        String(d["MDN"] || "").toLowerCase().includes(q) ||
+        String(d["Transaction Type"] || "").toLowerCase().includes(q)
+      );
+      renderTable(filtered);
+    }
+  </script>
+</body>
+</html>
