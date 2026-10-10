@@ -2,361 +2,386 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tomorrow Telecom - Partner Compensation Intelligence Portal</title>
+  <title>Tomorrow Telecom - Advanced Partner Intelligence</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom Scrollbar for the advanced table */
+    ::-webkit-scrollbar { height: 8px; width: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .table-header { position: sticky; top: 0; background-color: #f8fafc; z-index: 10; }
+  </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 font-sans antialiased">
+<body class="bg-slate-50 min-h-screen text-slate-800 font-sans antialiased flex flex-col">
 
-  <!-- Header Navigation -->
-  <header class="bg-[#0f5132] text-white shadow-lg sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex justify-between items-center">
+  <!-- Header -->
+  <header class="bg-[#0f5132] text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-[96%] mx-auto px-4 py-3 flex justify-between items-center">
       <div class="flex items-center space-x-3">
-        <div class="bg-white/10 p-2 rounded-xl border border-white/20">
-          <svg class="w-6 h-6 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="bg-white/10 p-2 rounded-lg border border-white/20">
+          <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
           </svg>
         </div>
         <div>
-          <h1 class="text-lg font-bold tracking-tight">Tomorrow Telecom & Realty</h1>
-          <p class="text-xs text-green-200">Executive Partner Portal</p>
+          <h1 class="text-md font-bold tracking-tight">Tomorrow Telecom</h1>
+          <p class="text-[10px] text-green-200 uppercase tracking-wider">Advanced Partner Portal</p>
         </div>
       </div>
       <div id="userProfile" class="hidden flex items-center space-x-3">
-        <span id="userBadge" class="text-xs px-2.5 py-1 rounded-full font-bold bg-amber-400 text-slate-900 hidden">SUPER ADMIN</span>
+        <span id="userBadge" class="text-[10px] px-2 py-1 rounded-sm font-bold bg-amber-400 text-slate-900 hidden">SUPER ADMIN</span>
         <span id="userEmailSpan" class="text-xs bg-green-950/60 px-3 py-1.5 rounded-full border border-green-700/60 font-mono text-green-200"></span>
-        <button onclick="handleLogout()" class="bg-white hover:bg-slate-100 text-[#0f5132] text-xs font-bold px-3.5 py-1.5 rounded-lg shadow transition">
-          Sign Out
-        </button>
+        <button onclick="handleLogout()" class="bg-white hover:bg-slate-100 text-[#0f5132] text-xs font-bold px-3 py-1.5 rounded-md shadow transition">Sign Out</button>
       </div>
     </div>
   </header>
 
   <!-- Login Section -->
-  <div id="loginSection" class="max-w-md mx-auto mt-20 p-8 bg-white shadow-2xl rounded-3xl text-center border border-slate-200/80">
-    <div class="w-16 h-16 bg-green-50 text-[#0f5132] flex items-center justify-center rounded-2xl mx-auto mb-4 border border-green-100">
-      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-      </svg>
+  <div id="loginSection" class="max-w-md mx-auto mt-24 p-8 bg-white shadow-xl rounded-2xl border border-slate-200 text-center">
+    <h2 class="text-2xl font-black text-slate-900 mb-2">Secure Access</h2>
+    <p class="text-xs text-slate-500 mb-6">Enter your authorized email to access compensation records.</p>
+    <div class="space-y-4">
+      <input type="email" id="partnerEmailInput" placeholder="name@domain.com" class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#0f5132] focus:ring-1 focus:ring-[#0f5132]">
+      <button onclick="submitLogin()" class="w-full bg-[#0f5132] hover:bg-green-800 text-white font-bold py-3 px-4 rounded-lg shadow transition">Verify Account</button>
     </div>
-    <h2 class="text-2xl font-black text-slate-900 mb-2">Partner Sign In</h2>
-    <p class="text-sm text-slate-500 mb-6 leading-relaxed">Enter your registered Google partner email address to access your authenticated door compensation reports.</p>
-
-    <!-- Email Entry Form -->
-    <div class="space-y-3">
-      <input type="email" id="partnerEmailInput" placeholder="name@tomorrowtelecom.com" class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#0f5132] transition">
-      <button onclick="submitLogin()" id="loginBtn" class="w-full bg-[#0f5132] hover:bg-green-800 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition flex items-center justify-center gap-2">
-        <span>Verify & Enter Dashboard</span>
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-      </button>
-    </div>
-
-    <!-- Quick Test Profiles Helper -->
-    <div class="mt-6 pt-5 border-t border-slate-100 text-left">
-      <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Quick Test One-Click Access:</p>
-      <div class="flex flex-col gap-1.5">
-        <button onclick="quickFill('seo.azmulani@gmail.com')" class="text-left text-xs bg-slate-50 hover:bg-green-50 hover:text-[#0f5132] p-2 rounded-lg border border-slate-200 transition flex justify-between items-center">
-          <span>👑 seo.azmulani@gmail.com</span>
-          <span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">All Doors</span>
-        </button>
-        <button onclick="quickFill('amiralimulani@gmail.com')" class="text-left text-xs bg-slate-50 hover:bg-green-50 hover:text-[#0f5132] p-2 rounded-lg border border-slate-200 transition flex justify-between items-center">
-          <span>🔍 amiralimulani@gmail.com</span>
-          <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">10 Test Doors</span>
-        </button>
-      </div>
-    </div>
-
-    <p id="loginError" class="text-rose-600 text-xs mt-4 hidden bg-rose-50 p-3 rounded-xl border border-rose-200 font-medium"></p>
+    <p id="loginError" class="text-rose-600 text-xs mt-4 hidden bg-rose-50 p-2 rounded border border-rose-200"></p>
   </div>
 
-  <!-- Authenticated Dashboard UI -->
-  <main id="dashboardSection" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+  <!-- Dashboard Section -->
+  <main id="dashboardSection" class="hidden flex-1 w-full max-w-[98%] mx-auto py-6 space-y-4">
     
-    <!-- Top Bar: Title & Doors -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
-      <div>
-        <h2 class="text-2xl font-extrabold text-slate-900" id="ownerTitle">Partner Dashboard</h2>
-        <p class="text-xs text-slate-500 mt-1 font-medium" id="doorsSummary">Fetching assigned stores...</p>
+    <!-- Title & KPIs -->
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div class="col-span-1 md:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center">
+        <h2 class="text-xl font-extrabold text-slate-900" id="ownerTitle">Partner Data</h2>
+        <p class="text-xs text-slate-500 mt-1" id="doorsSummary">Loading...</p>
       </div>
-      <div class="flex flex-wrap items-center gap-2">
-        <button onclick="downloadCSV()" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition shadow">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-          Export Filtered CSV
-        </button>
+      
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <p class="text-[10px] font-bold text-slate-400 uppercase">Filtered Compensation</p>
+        <p class="text-2xl font-black text-emerald-600 mt-1" id="kpiTotalAmount">$0.00</p>
       </div>
-    </div>
-
-    <!-- Metric KPI Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Net Compensation</p>
-        <p class="text-2xl font-black text-emerald-600 mt-2" id="kpiTotalAmount">$0.00</p>
-        <p class="text-[11px] text-slate-400 mt-1">Sum of selected view</p>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <p class="text-[10px] font-bold text-slate-400 uppercase">Total Rows (Filtered)</p>
+        <p class="text-2xl font-black text-slate-800 mt-1" id="kpiTotalCount">0</p>
       </div>
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Transactions</p>
-        <p class="text-2xl font-black text-slate-800 mt-2" id="kpiTotalCount">0</p>
-        <p class="text-[11px] text-slate-400 mt-1">Processed rows</p>
-      </div>
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Activations & Retention</p>
-        <p class="text-2xl font-black text-indigo-600 mt-2" id="kpiActivations">0</p>
-        <p class="text-[11px] text-slate-400 mt-1">New accounts / additions</p>
-      </div>
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Door Codes</p>
-        <p class="text-2xl font-black text-amber-600 mt-2" id="kpiDoorCount">0</p>
-        <p class="text-[11px] text-slate-400 mt-1">Generating stores</p>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center gap-2">
+        <button onclick="downloadCSV('filtered')" class="w-full bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold py-2 px-3 rounded shadow transition">↓ Export Filtered CSV</button>
+        <button onclick="downloadCSV('all')" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold py-2 px-3 rounded shadow transition">↓ Export Complete (My Doors)</button>
       </div>
     </div>
 
-    <!-- Reports Section -->
-    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 space-y-4">
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+    <!-- Advanced Filters Panel -->
+    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+      <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
+        <h3 class="text-sm font-bold text-slate-700">Advanced Data Filters</h3>
+        <button onclick="clearFilters()" class="text-xs text-rose-600 hover:underline font-semibold">Clear All Filters</button>
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
+        <!-- Universal Search -->
+        <div class="md:col-span-2">
+          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Universal Search (IMEI, Address, MDN, etc.)</label>
+          <input type="text" id="filterSearch" oninput="applyFilters()" placeholder="Search anything in the report..." class="w-full border border-slate-300 rounded px-3 py-1.5 text-xs outline-none focus:border-[#0f5132]">
+        </div>
         
-        <!-- Tabs -->
-        <nav class="flex flex-wrap gap-2" id="reportTabs">
-          <button onclick="setReportType('all')" class="report-tab-btn active px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-[#0f5132] text-white" data-type="all">All Transactions</button>
-          <button onclick="setReportType('activation')" class="report-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200" data-type="activation">Activations / Retention</button>
-          <button onclick="setReportType('feature')" class="report-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200" data-type="feature">Features & Add-ons</button>
-          <button onclick="setReportType('spiff')" class="report-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200" data-type="spiff">HSI & SPIFFs</button>
-          <button onclick="setReportType('hardware')" class="report-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200" data-type="hardware">Hardware / Devices</button>
-        </nav>
-
-        <!-- Filters -->
-        <div class="flex items-center gap-2 w-full sm:w-auto">
-          <select id="doorFilterSelect" onchange="applyFilters()" class="border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-medium focus:ring-2 focus:ring-[#0f5132] outline-none">
-            <option value="">All Doors</option>
+        <!-- Door Code -->
+        <div>
+          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Store / Door Code</label>
+          <select id="filterDoor" onchange="applyFilters()" class="w-full border border-slate-300 rounded px-3 py-1.5 text-xs outline-none focus:border-[#0f5132]">
+            <option value="">All My Doors</option>
           </select>
-          <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Search MDN, SOC, Type..." class="border border-slate-300 rounded-xl px-3.5 py-1.5 text-xs w-full sm:w-56 focus:ring-2 focus:ring-[#0f5132] outline-none shadow-sm">
+        </div>
+
+        <!-- Qualification Status -->
+        <div>
+          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Qualification Status</label>
+          <select id="filterStatus" onchange="applyFilters()" class="w-full border border-slate-300 rounded px-3 py-1.5 text-xs outline-none focus:border-[#0f5132]">
+            <option value="">All Statuses</option>
+            <option value="qualified">Qualified</option>
+            <option value="non-qualified">Non-Qualified / Pending</option>
+          </select>
+        </div>
+        
+        <!-- Pre-set Tabs -->
+        <div>
+          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Quick View</label>
+          <select id="filterType" onchange="applyFilters()" class="w-full border border-slate-300 rounded px-3 py-1.5 text-xs outline-none focus:border-[#0f5132]">
+            <option value="all">All Transactions</option>
+            <option value="activation">Activations & Retentions</option>
+            <option value="spiff">HSI & SPIFFs</option>
+          </select>
         </div>
       </div>
 
-      <!-- Data Table -->
-      <div class="overflow-x-auto rounded-xl border border-slate-100">
-        <table class="min-w-full divide-y divide-slate-200 text-xs">
-          <thead class="bg-slate-50 text-slate-700 font-semibold uppercase tracking-wider text-[11px]">
-            <tr>
-              <th class="py-3 px-3 text-left">Door Code</th>
-              <th class="py-3 px-3 text-left">Store Name</th>
-              <th class="py-3 px-3 text-left">Trans Date</th>
-              <th class="py-3 px-3 text-left">Posted Date</th>
-              <th class="py-3 px-3 text-left">Transaction Type</th>
-              <th class="py-3 px-3 text-left">MDN</th>
-              <th class="py-3 px-3 text-left">Handset / Model</th>
-              <th class="py-3 px-3 text-left">SOC</th>
-              <th class="py-3 px-3 text-right">Amount</th>
-            </tr>
+      <!-- Date Filters Row -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 pt-3 border-t border-slate-100">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+          <label class="text-[10px] font-bold text-slate-500 uppercase w-24">Trans Date:</label>
+          <input type="date" id="transDateStart" onchange="applyFilters()" class="border border-slate-300 rounded px-2 py-1 text-xs outline-none focus:border-[#0f5132]">
+          <span class="text-xs text-slate-400">to</span>
+          <input type="date" id="transDateEnd" onchange="applyFilters()" class="border border-slate-300 rounded px-2 py-1 text-xs outline-none focus:border-[#0f5132]">
+        </div>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+          <label class="text-[10px] font-bold text-slate-500 uppercase w-24">Posted Date:</label>
+          <input type="date" id="postDateStart" onchange="applyFilters()" class="border border-slate-300 rounded px-2 py-1 text-xs outline-none focus:border-[#0f5132]">
+          <span class="text-xs text-slate-400">to</span>
+          <input type="date" id="postDateEnd" onchange="applyFilters()" class="border border-slate-300 rounded px-2 py-1 text-xs outline-none focus:border-[#0f5132]">
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Table Container -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[500px]">
+      <div class="overflow-auto flex-1 relative">
+        <table class="w-full text-left border-collapse min-w-[2000px]"> <!-- Very wide to support all headers -->
+          <thead id="tableHead" class="table-header text-[10px] uppercase text-slate-500 font-bold bg-slate-50 border-b border-slate-200">
+            <!-- Headers injected via JS -->
           </thead>
-          <tbody id="tableBody" class="divide-y divide-slate-100 bg-white">
-            <tr>
-              <td colspan="9" class="text-center py-14 text-slate-400">Loading records...</td>
-            </tr>
+          <tbody id="tableBody" class="divide-y divide-slate-100 text-xs text-slate-700">
+            <tr><td class="p-8 text-center text-slate-400">Please sign in to load records...</td></tr>
           </tbody>
         </table>
       </div>
-
-      <!-- Footer Info -->
-      <div class="flex justify-between items-center text-[11px] text-slate-400 px-2 pt-1">
-        <span id="filteredCountLabel">Showing 0 records</span>
-        <span>Secured via Tomorrow Telecom Callidus Engine</span>
+      <div class="bg-slate-50 border-t border-slate-200 p-2 text-[10px] text-slate-500 flex justify-between">
+        <span id="tableStatus">Showing 0 rows</span>
+        <span>Secure Environment</span>
       </div>
     </div>
   </main>
 
   <script>
-    // Live Apps Script Web App Endpoint
+    // REPLACE WITH YOUR APPS SCRIPT WEB APP URL
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyupQxtYpQhxmXTaklvOevjxlddmROohJ2COBGW9uBtCENJigixnbun8yVdOjf5ZVoRUA/exec";
 
-    let rawMasterData = [];
-    let currentFilterType = 'all';
+    let globalHeaders = [];
+    let globalDataRows = [];
+    let filteredRows = [];
 
-    function quickFill(email) {
-      document.getElementById('partnerEmailInput').value = email;
-      submitLogin();
-    }
+    // Header Index Map for dynamic column finding
+    const colIdx = {}; 
+
+    document.getElementById("partnerEmailInput").addEventListener("keypress", (e) => { if(e.key === "Enter") submitLogin(); });
 
     function submitLogin() {
       const email = document.getElementById('partnerEmailInput').value.trim().toLowerCase();
-      if (!email || !email.includes('@')) {
-        showError("Please provide a valid email address.");
-        return;
-      }
-      hideError();
-      initSession(email);
-    }
-
-    function initSession(email) {
+      if (!email || !email.includes('@')) return showError("Invalid email format.");
+      document.getElementById('loginError').classList.add('hidden');
       document.getElementById('loginSection').classList.add('hidden');
       document.getElementById('dashboardSection').classList.remove('hidden');
       document.getElementById('userProfile').classList.remove('hidden');
       document.getElementById('userEmailSpan').innerText = email;
-      loadPartnerData(email);
+      fetchData(email);
     }
 
-    function handleLogout() {
-      location.reload();
-    }
+    function handleLogout() { location.reload(); }
+    function showError(msg) { const e = document.getElementById('loginError'); e.innerText = msg; e.classList.remove('hidden'); }
 
-    function showError(msg) {
-      const err = document.getElementById('loginError');
-      err.innerText = msg;
-      err.classList.remove('hidden');
-    }
-
-    function hideError() {
-      document.getElementById('loginError').classList.add('hidden');
-    }
-
-    async function loadPartnerData(email) {
-      const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = `<tr><td colspan="9" class="text-center py-14 text-slate-400">Loading authorized records for <b>${email}</b>...</td></tr>`;
-
+    async function fetchData(email) {
+      document.getElementById('tableBody').innerHTML = `<tr><td class="p-10 text-center text-[#0f5132] font-bold text-sm"><div class="inline-block animate-spin rounded-full h-5 w-5 border-b-2 border-[#0f5132] mr-2 mb-1"></div>Loading secure records... This may take a moment.</td></tr>`;
       try {
-        const res = await fetch(`${APPS_SCRIPT_URL}?email=${encodeURIComponent(email)}`);
-        const json = await res.json();
+        const response = await fetch(`${APPS_SCRIPT_URL}?email=${encodeURIComponent(email)}`);
+        if(!response.ok) throw new Error("Network Error");
+        const json = await response.json();
 
         if (json.status !== "success") {
-          tbody.innerHTML = `<tr><td colspan="9" class="text-center py-14 text-rose-500 font-semibold">${json.message}</td></tr>`;
-          document.getElementById('doorsSummary').innerText = "Access Denied";
+          document.getElementById('tableBody').innerHTML = `<tr><td class="p-10 text-center text-rose-600 font-bold">${json.message}</td></tr>`;
           return;
         }
 
-        if (json.isSuperAdmin) {
-          document.getElementById('userBadge').classList.remove('hidden');
-        }
-
+        if (json.isSuperAdmin) document.getElementById('userBadge').classList.remove('hidden');
         document.getElementById('ownerTitle').innerText = json.owner;
-        document.getElementById('doorsSummary').innerText = `Accessible Doors: ${json.doors.join(', ')} | Total Records: ${json.totalRecords}`;
+        document.getElementById('doorsSummary').innerText = `Authorized Doors: ${json.doors.join(', ')}`;
 
-        // Populate Door Selector Dropdown
-        const doorSelect = document.getElementById('doorFilterSelect');
-        doorSelect.innerHTML = `<option value="">All Doors (${json.doors.length})</option>`;
-        json.doors.forEach(d => {
-          doorSelect.innerHTML += `<option value="${d}">Door ${d}</option>`;
-        });
+        globalHeaders = json.headers;
+        globalDataRows = json.data;
 
-        rawMasterData = json.data || [];
+        // Map column names to indices automatically (case-insensitive)
+        globalHeaders.forEach((h, i) => { colIdx[String(h).toLowerCase().trim()] = i; });
+        
+        // Find important columns (fallback to partial match if exact match fails)
+        colIdx.doorCode = findColumnIndex(["door code", "dealer code", "store"]);
+        colIdx.transDate = findColumnIndex(["transaction date", "trans date"]);
+        colIdx.postDate = findColumnIndex(["posted date", "post date"]);
+        colIdx.amount = findColumnIndex(["amount", "numeric amount", "transaction amount"]);
+        colIdx.transType = findColumnIndex(["transaction type", "trans type"]);
+        colIdx.status = findColumnIndex(["qualification status", "status", "qualification"]);
+
+        // Populate Door Filter Dropdown dynamically based on actual data
+        const doorSelect = document.getElementById('filterDoor');
+        const uniqueDoors = new Set(globalDataRows.map(row => row[colIdx.doorCode]));
+        uniqueDoors.forEach(d => { if(d) doorSelect.innerHTML += `<option value="${d}">${d}</option>`; });
+
+        buildTableHeader();
         applyFilters();
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="9" class="text-center py-14 text-rose-500 font-medium">Failed to retrieve data from API. Please verify deployment.</td></tr>`;
+
+      } catch(err) {
+        document.getElementById('tableBody').innerHTML = `<tr><td class="p-10 text-center text-rose-600 font-bold">Failed to connect to Secure API. Check deployment 'Anyone' access.</td></tr>`;
       }
     }
 
-    function setReportType(type) {
-      currentFilterType = type;
-      document.querySelectorAll('.report-tab-btn').forEach(btn => {
-        if (btn.getAttribute('data-type') === type) {
-          btn.className = "report-tab-btn active px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-[#0f5132] text-white";
-        } else {
-          btn.className = "report-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200";
-        }
+    // Helper to find column index gracefully
+    function findColumnIndex(possibleNames) {
+      for (let name of possibleNames) {
+        let exactMatch = globalHeaders.findIndex(h => String(h).toLowerCase().trim() === name);
+        if (exactMatch !== -1) return exactMatch;
+        let partialMatch = globalHeaders.findIndex(h => String(h).toLowerCase().includes(name));
+        if (partialMatch !== -1) return partialMatch;
+      }
+      return -1;
+    }
+
+    function buildTableHeader() {
+      // Prioritize some key columns first if they exist, then dump the rest, 
+      // OR simply render all headers in order so user sees the EXACT sheet structure.
+      const thead = document.getElementById('tableHead');
+      const tr = document.createElement('tr');
+      globalHeaders.forEach(h => {
+        const th = document.createElement('th');
+        th.className = "py-2 px-3 whitespace-nowrap tracking-wide border-r border-slate-200";
+        th.innerText = h;
+        tr.appendChild(th);
       });
+      thead.innerHTML = '';
+      thead.appendChild(tr);
+    }
+
+    function clearFilters() {
+      document.getElementById('filterSearch').value = "";
+      document.getElementById('filterDoor').value = "";
+      document.getElementById('filterStatus').value = "";
+      document.getElementById('filterType').value = "all";
+      document.getElementById('transDateStart').value = "";
+      document.getElementById('transDateEnd').value = "";
+      document.getElementById('postDateStart').value = "";
+      document.getElementById('postDateEnd').value = "";
       applyFilters();
     }
 
     function applyFilters() {
-      const selectedDoor = document.getElementById('doorFilterSelect').value;
-      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const searchQ = document.getElementById('filterSearch').value.toLowerCase().trim();
+      const doorQ = document.getElementById('filterDoor').value;
+      const statusQ = document.getElementById('filterStatus').value.toLowerCase();
+      const typeQ = document.getElementById('filterType').value;
+      
+      const tStart = document.getElementById('transDateStart').value;
+      const tEnd = document.getElementById('transDateEnd').value;
+      const pStart = document.getElementById('postDateStart').value;
+      const pEnd = document.getElementById('postDateEnd').value;
 
-      let filtered = rawMasterData.filter(item => {
-        if (selectedDoor && item.doorCode !== selectedDoor) return false;
-
-        if (currentFilterType === 'activation') {
-          const t = (item.transType || "").toLowerCase();
-          if (!t.includes('activation') && !t.includes('retention')) return false;
-        } else if (currentFilterType === 'feature') {
-          const t = (item.transType || "").toLowerCase();
-          if (!t.includes('feature')) return false;
-        } else if (currentFilterType === 'spiff') {
-          const t = (item.transType || "").toLowerCase();
-          const p = (item.program || "").toLowerCase();
-          if (!t.includes('spiff') && !p.includes('spiff') && !t.includes('hsi')) return false;
-        } else if (currentFilterType === 'hardware') {
-          if (!item.model || item.model === "-" || item.model === "NA") return false;
+      filteredRows = globalDataRows.filter(row => {
+        // 1. Door Filter
+        if (doorQ && row[colIdx.doorCode] !== doorQ) return false;
+        
+        // 2. Type Filter (Activation / SPIFF)
+        if (typeQ !== 'all' && colIdx.transType !== -1) {
+          const typeVal = String(row[colIdx.transType]).toLowerCase();
+          if (typeQ === 'activation' && !typeVal.includes('activation') && !typeVal.includes('retention')) return false;
+          if (typeQ === 'spiff' && !typeVal.includes('spiff') && !typeVal.includes('hsi')) return false;
         }
 
-        if (query) {
-          const matchStr = `${item.doorCode} ${item.doorName} ${item.mdn} ${item.transType} ${item.model} ${item.soc} ${item.employee}`.toLowerCase();
-          if (!matchStr.includes(query)) return false;
+        // 3. Status Filter
+        if (statusQ && colIdx.status !== -1) {
+          const sVal = String(row[colIdx.status]).toLowerCase();
+          if (statusQ === 'qualified' && (!sVal.includes('qual') || sVal.includes('non'))) return false;
+          if (statusQ === 'non-qualified' && !sVal.includes('non') && !sVal.includes('pending')) return false;
+        }
+
+        // 4. Transaction Date Filter
+        if ((tStart || tEnd) && colIdx.transDate !== -1) {
+          const rDate = row[colIdx.transDate]; // Already yyyy-mm-dd
+          if (tStart && rDate < tStart) return false;
+          if (tEnd && rDate > tEnd) return false;
+        }
+
+        // 5. Posted Date Filter
+        if ((pStart || pEnd) && colIdx.postDate !== -1) {
+          const pDate = row[colIdx.postDate]; 
+          if (pStart && pDate < pStart) return false;
+          if (pEnd && pDate > pEnd) return false;
+        }
+
+        // 6. Universal Search (Checks ALL columns: Address, IMEI, MDN, etc.)
+        if (searchQ) {
+          const fullRowString = row.join(" ").toLowerCase();
+          if (!fullRowString.includes(searchQ)) return false;
         }
 
         return true;
       });
 
-      renderKPIs(filtered);
-      renderTable(filtered);
+      renderTable();
+      updateKPIs();
     }
 
-    function renderKPIs(items) {
-      let totalAmount = 0;
-      let activationsCount = 0;
-      const uniqueDoors = new Set();
-
-      items.forEach(it => {
-        totalAmount += (it.amount || 0);
-        uniqueDoors.add(it.doorCode);
-        const t = (it.transType || "").toLowerCase();
-        if (t.includes('activation') || t.includes('retention')) {
-          activationsCount++;
-        }
-      });
-
-      document.getElementById('kpiTotalAmount').innerText = `$${totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      document.getElementById('kpiTotalCount').innerText = items.length.toLocaleString();
-      document.getElementById('kpiActivations').innerText = activationsCount.toLocaleString();
-      document.getElementById('kpiDoorCount').innerText = uniqueDoors.size.toString();
-      document.getElementById('filteredCountLabel').innerText = `Displaying ${items.length} records`;
-    }
-
-    function renderTable(items) {
+    function renderTable() {
       const tbody = document.getElementById('tableBody');
-      if (items.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" class="text-center py-14 text-slate-400">No matching transactions found for this view.</td></tr>`;
+      if (filteredRows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="${globalHeaders.length}" class="p-8 text-center text-slate-400">No records found matching these filters.</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = items.map(r => `
-        <tr class="hover:bg-slate-50/80 transition">
-          <td class="py-2.5 px-3 font-semibold text-slate-900">${r.doorCode}</td>
-          <td class="py-2.5 px-3 text-slate-600 truncate max-w-[120px]" title="${r.doorName}">${r.doorName || "-"}</td>
-          <td class="py-2.5 px-3 text-slate-600">${r.transDate || "-"}</td>
-          <td class="py-2.5 px-3 text-slate-600">${r.postedDate || "-"}</td>
-          <td class="py-2.5 px-3 text-slate-700 font-medium">${r.transType || "-"}</td>
-          <td class="py-2.5 px-3 font-mono text-slate-600">${r.mdn || "-"}</td>
-          <td class="py-2.5 px-3 text-slate-600 truncate max-w-xs" title="${r.model}">${r.model || "-"}</td>
-          <td class="py-2.5 px-3 font-mono text-slate-500">${r.soc || "-"}</td>
-          <td class="py-2.5 px-3 text-right font-bold ${r.amount >= 0 ? 'text-emerald-700' : 'text-rose-600'}">
-            $${Number(r.amount).toFixed(2)}
-          </td>
-        </tr>
-      `).join('');
+      // To prevent browser freeze on huge lists, render up to 500 rows in UI max. (CSV exports all)
+      const displayLimit = 500; 
+      const rowsToRender = filteredRows.slice(0, displayLimit);
+
+      const html = rowsToRender.map(row => {
+        const cells = row.map((cell, index) => {
+          // Highlight amount column specifically if found
+          let className = "py-2 px-3 whitespace-nowrap border-r border-slate-100";
+          if (index === colIdx.amount) {
+            const num = Number(String(cell).replace(/[^0-9.-]+/g, ""));
+            className += num >= 0 ? " font-bold text-emerald-600" : " font-bold text-rose-600";
+          }
+          return `<td class="${className}">${cell}</td>`;
+        }).join('');
+        return `<tr class="hover:bg-slate-100 transition">${cells}</tr>`;
+      }).join('');
+
+      tbody.innerHTML = html;
+      
+      let statusMsg = `Showing ${rowsToRender.length} of ${filteredRows.length} filtered rows.`;
+      if(filteredRows.length > displayLimit) statusMsg += ` (Use CSV export to download all).`;
+      document.getElementById('tableStatus').innerText = statusMsg;
     }
 
-    function downloadCSV() {
-      if (rawMasterData.length === 0) {
+    function updateKPIs() {
+      let totalAmount = 0;
+      filteredRows.forEach(row => {
+        if (colIdx.amount !== -1) {
+          let val = row[colIdx.amount];
+          let num = typeof val === 'number' ? val : parseFloat(String(val).replace(/[^0-9.-]+/g, ""));
+          if (!isNaN(num)) totalAmount += num;
+        }
+      });
+      document.getElementById('kpiTotalCount').innerText = filteredRows.length.toLocaleString();
+      document.getElementById('kpiTotalAmount').innerText = `$${totalAmount.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+    }
+
+    // Export Logic
+    function downloadCSV(type) {
+      const dataToExport = type === 'filtered' ? filteredRows : globalDataRows;
+      
+      if (dataToExport.length === 0) {
         alert("No data available to export.");
         return;
       }
 
-      const headers = ["Door Code", "Store Name", "Trans Date", "Posted Date", "Transaction Type", "MDN", "Handset Model", "SOC", "Amount"];
-      const rows = rawMasterData.map(r => [
-        `"${r.doorCode}"`,
-        `"${r.doorName.replace(/"/g, '""')}"`,
-        `"${r.transDate}"`,
-        `"${r.postedDate}"`,
-        `"${r.transType}"`,
-        `"${r.mdn}"`,
-        `"${r.model.replace(/"/g, '""')}"`,
-        `"${r.soc}"`,
-        r.amount
-      ]);
+      const csvHeaders = globalHeaders.map(h => `"${String(h).replace(/"/g, '""')}"`).join(",");
+      const csvRows = dataToExport.map(row => {
+        return row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",");
+      }).join("\n");
 
-      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+      const csvContent = "data:text/csv;charset=utf-8," + csvHeaders + "\n" + csvRows;
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `Compensation_Report_${new Date().toISOString().slice(0,10)}.csv`);
+      
+      const label = type === 'filtered' ? 'Filtered_Report' : 'Complete_Authorized_Report';
+      link.setAttribute("download", `${label}_${new Date().toISOString().slice(0,10)}.csv`);
+      
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
